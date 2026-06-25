@@ -1,32 +1,24 @@
 var express = require('express');
 var router = express.Router();
 
-// レスポンスのデータ（ノート全件）
-const responseObjectDataAll = {
-textObject1 : {
-id: 1,
-title: 'ノート１のタイトルです',
-subTitle: 'ノート１のサブタイトルです',
-bodyText: 'ノート１の本文です'
-},
-textObject2 : {
-id: 2,
-title: 'ノート２のタイトルです',
-subTitle: 'ノート２のサブタイトルです',
-bodyText: 'ノート２の本文です'
-},
-};
+// 1. MongoDBモジュールを読み込み、接続を設定します
+const { MongoClient } = require("mongodb");
+// ★ここには、前回設定したあなたの「シンプルなパスワード」入りのURIを貼り付けてください
+const uri = "mongodb+srv://shimadai1508_db_user:rd2568js@cluster0.bhi8m5r.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
 
-/**
-* メモを全件取得するAPI
-* @returns {Object[]} data
-* @returns {number} data.id - ID
-* @returns {string} data.title - タイトル
-* @returns {string} data.text - 内容
-*/
-router.get('/', function (req, res, next) {
-// 全件取得して返す
-res.json(responseObjectDataAll);
-})
+// 2. /notes にアクセスがあったときの処理
+router.get('/', async (req, res) => {
+  // データベースとコレクション（notes）を指定します
+  const database = client.db('notes');
+  const notes = database.collection('notes');
+  
+  // idが1のドキュメントを取得します（資料の指示通り）
+  const query = { id: 1 };
+  const note = await notes.findOne(query);
+  
+  // ブラウザへJSON形式でデータを返します
+  res.json(note);
+});
 
 module.exports = router;
