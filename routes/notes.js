@@ -4,7 +4,7 @@ var router = express.Router();
 // 1. MongoDBモジュールを読み込み、接続を設定します
 const { MongoClient } = require("mongodb");
 // ★ここには、前回設定したあなたの「シンプルなパスワード」入りのURIを貼り付けてください
-const uri = "*********";
+const uri = "";
 const client = new MongoClient(uri);
 
 // 2. /notes にアクセスがあったときの処理
